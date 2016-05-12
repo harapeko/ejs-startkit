@@ -1,0 +1,18 @@
+[
+  {
+    "template": "./ejs/home.ejs",
+    "url": "index.html",
+    "page_category": "page_home",
+    "title": "これはタイトルです",
+    "keywords": "これはキーワードです",
+    "description": "これはディスクリプションです"
+  },
+  {
+    "template": "./ejs/common01.ejs",
+    "url": "hoge/index.html",
+    "page_category": "page_hoge",
+    "title": "これはタイトルです",
+    "keywords": "これはキーワードです",
+    "description": "これはディスクリプションです"
+  }
+]
