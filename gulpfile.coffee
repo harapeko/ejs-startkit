@@ -17,8 +17,12 @@ paths =
     watch: ['sass/*.sass', 'sass/**/*.sass']
   js:
     coffee: 'js/coffee/*.coffee'
+    jquery: 'js/jquery/*.js'
     plugin: 'js/plugin/*.js'
-    dest: 'dest/js/'
+    dest: 'dest/js'
+  img:
+    src: 'img/**/*'
+    dest: 'dest/img/'
   sc5:
     port: '3333'
     dest: 'sc5'
@@ -58,7 +62,7 @@ g.task 'css', ->
 # string out_path        出力ディレクトリ
 # string dest_file_name  出力ファイル名
 coffee_compile_process = (in_path, out_path, dest_file_name = 'app.js') ->
-  g.src([in_path, paths.js.plugin])
+  g.src([paths.js.jquery, paths.js.plugin, in_path])
   .pipe $.plumber()
   .pipe $.if(/[.]coffee$/, $.coffee())
   .pipe $.uglify mangle: ['jQuery']
@@ -90,6 +94,12 @@ g.task 'styleguide:applystyles', ->
 
 g.task 'sc5', ['styleguide:generate', 'styleguide:applystyles']
 
+# img optimize
+g.task 'img', ->
+  g.src paths.img.src
+  .pipe $.imagemin()
+  .pipe g.dest paths.img.dest
+
 # clean
 g.task 'clean', (cb) ->
   rimraf paths.dest, cb
@@ -102,7 +112,7 @@ g.task 'bs', ->
   })
 
 # build
-g.task 'build', ['clean', 'ejs'], ->
+g.task 'build', ['ejs', 'css', 'coffee', 'img'], ->
   console.log 'build done!'
 
 # test
@@ -115,8 +125,9 @@ g.task 'watch', ['sc5'], ->
 
   g.watch paths.ejs.watch, ['ejs', bs.reload]
   g.watch paths.css.watch, ['css', bs.reload]
-  g.watch [paths.js.coffee, paths.js.plugin], ['coffee', bs.reload]
+  g.watch [paths.js.coffee, paths.js.jquery, paths.js.plugin], ['coffee', bs.reload]
   g.watch paths.css.watch, ['sc5']
+  g.watch paths.img.src, ['img']
 
 # default
 g.task 'default', ['bs', 'watch']
