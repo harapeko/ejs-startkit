@@ -25,7 +25,9 @@ paths =
     dest: 'dest/img/'
   sc5:
     port: '3333'
-    dest: 'sc5'
+    edit: 'sc5_edit'
+    dest: 'gh-pages'
+    app_root: '/ejs-startkit'
 
 # ejs
 g.task 'ejs', ->
@@ -74,25 +76,39 @@ coffee_compile_process = (in_path, out_path, dest_file_name = 'app.js') ->
 g.task 'coffee', ->
   coffee_compile_process(paths.js.coffee, paths.js.dest)
 
-# sc5
-g.task 'styleguide:generate', ->
+# sc5 edit
+g.task 'sc5_edit', ->
+  g.src paths.css.sass
+  .pipe sc5.generate
+    title: 'SC5 Styleguide edit'
+    server: true
+    port: paths.sc5.port
+    rootPath: paths.sc5.edit
+    overviewPath: 'overview.md'
+  .pipe g.dest paths.sc5.edit
+
+  g.src paths.css.sass
+  .pipe $.sass
+    errLogToConsole: true
+  .pipe sc5.applyStyles()
+  .pipe g.dest paths.sc5.edit
+
+
+# sc5 github page
+g.task 'gh', ->
   g.src paths.css.sass
   .pipe sc5.generate
     title: 'SC5 Styleguide'
-    server: true
-    port: paths.sc5.port
-    rootPath: paths.sc5.dest
+    appRoot: paths.sc5.app_root
     overviewPath: 'overview.md'
   .pipe g.dest paths.sc5.dest
 
-g.task 'styleguide:applystyles', ->
   g.src paths.css.sass
   .pipe $.sass
     errLogToConsole: true
   .pipe sc5.applyStyles()
   .pipe g.dest paths.sc5.dest
 
-g.task 'sc5', ['styleguide:generate', 'styleguide:applystyles']
 
 # img optimize
 g.task 'img', ->
@@ -120,13 +136,13 @@ g.task 'test', ->
   console.log 'this is testttttt'
 
 # watch
-g.task 'watch', ['sc5'], ->
+g.task 'watch', ['sc5_edit'], ->
   openurl.open 'http://localhost:' + paths.sc5.port
 
   g.watch paths.ejs.watch, ['ejs', bs.reload]
   g.watch paths.css.watch, ['css', bs.reload]
   g.watch [paths.js.coffee, paths.js.jquery, paths.js.plugin], ['coffee', bs.reload]
-  g.watch paths.css.watch, ['sc5']
+  g.watch paths.css.watch, ['sc5_edit']
   g.watch paths.img.src, ['img']
 
 # default
