@@ -126,6 +126,7 @@ g.task 'bs', ->
   bs.init(null, {
     server:
       baseDir: 'dest'
+    reloadDelay: 120
   })
 
 # build
