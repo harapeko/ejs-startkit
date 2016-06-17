@@ -1,5 +1,6 @@
 g = require 'gulp'
 $ = do require 'gulp-load-plugins'
+fs = require 'fs'
 bs = require('browser-sync').create()
 sc5 = require 'sc5-styleguide'
 rimraf = require 'rimraf'
@@ -32,7 +33,7 @@ paths =
 # ejs
 g.task 'ejs', ->
   #JSON データ
-  jsonData = require paths.ejs.json
+  jsonData = JSON.parse fs.readFileSync(paths.ejs.json)
 
   jsonData.forEach (page, i) ->
     g.src page.template
@@ -139,7 +140,7 @@ g.task 'test', ->
 g.task 'watch', ['sc5_edit'], ->
   openurl.open 'http://localhost:' + paths.sc5.port
 
-  g.watch paths.ejs.watch, ['ejs', bs.reload]
+  g.watch [paths.ejs.watch, paths.ejs.json], ['ejs', bs.reload]
   g.watch paths.css.watch, ['css', bs.reload]
   g.watch [paths.js.coffee, paths.js.jquery, paths.js.plugin], ['coffee', bs.reload]
   g.watch paths.css.watch, ['sc5_edit']
