@@ -1,0 +1,32 @@
+// # 使い方
+// ## 設置方法
+// <head>直下に下記1行を設置する
+// <%- include('../function/_relative_path') -%>
+//
+// # 各ejsで`RELATIVE_PATH`というglobal変数が扱えるようになります。
+//
+// # 説明
+// pages.jsonの
+// "title": "エントリー | 採用情報 | プロジェクトネーム",
+// 「｜」の数でルートまでの相対を作ってます。
+// 
+
+<%
+// global変数 RELATIVE_PATH に相対パスを保存する
+// カウンター
+var counter = function(str,seq){
+  return str.split(seq).length - 1;
+}
+// ページタイトルから階層の深さを算出する
+var str_page_title = pageData.title;
+var int_depgth = counter(str_page_title, "｜")
+
+// 相対パスを初期化(ファイル間で使う為にglobal変数)
+RELATIVE_PATH = (int_depgth > 0) ? "" : "./";
+
+// 相対パスを作成する
+while(1 <= int_depgth){
+  RELATIVE_PATH += "../";
+  int_depgth--;
+}
+%>
