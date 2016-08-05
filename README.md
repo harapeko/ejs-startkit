@@ -120,6 +120,10 @@ ejsから生成したhtmlディレクトリを削除する
 |sass|css, sc5|
 |coffeescript|js|
 
+# gulp pluginのアップデート
+npm-check-updates
+https://www.npmjs.com/package/npm-check-updates
+
 # ■TODO
 `_header.ejs`、`_header_common.ejs`みたいな事になってきた場合、<br>
 json側のデータを使って呼び出すか、テンプレート側で直接指定するかは方向性が決まっていないです。

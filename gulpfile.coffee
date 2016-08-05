@@ -5,6 +5,9 @@ bs = require('browser-sync').create()
 sc5 = require 'sc5-styleguide'
 rimraf = require 'rimraf'
 openurl = require 'openurl'
+doiuse = require 'doiuse'
+autoprefixer = require 'autoprefixer'
+mqpacker = require 'css-mqpacker'
 
 # paths
 paths =
@@ -30,6 +33,11 @@ paths =
     dest: 'gh-pages'
     app_root: '/ejs-startkit'
 
+# target browsers
+target_browsers = [
+  '> 5%',
+]
+
 # ejs
 g.task 'ejs', ->
   #JSON データ
@@ -49,9 +57,14 @@ g.task 'ejs', ->
 sass_compile_process = (in_path, out_path, dest_file_name = 'app.css') ->
   g.src in_path
   .pipe $.plumber()
-  .pipe $.sass
-    outputStyle: 'compressed'
-  .pipe $.autoprefixer autoprefixer: '> 5%'
+  .pipe $.sass()
+  #.pipe $.autoprefixer autoprefixer: '> 5%'
+  .pipe $.postcss([
+    doiuse(browsers: target_browsers),
+    autoprefixer(browsers: target_browsers),
+    mqpacker
+  ])
+  .pipe $.csso()
   .pipe $.concat dest_file_name
   .pipe g.dest out_path
   .pipe $.filesize()
