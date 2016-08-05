@@ -1,0 +1,11 @@
+<nav class="l_bread">
+  <ul class="l_bread_li">
+    <% for(var bread_url in breadData){ %>
+      <% var bread_name = breadData[bread_url] %>
+      <li class="l_bread_li_item">
+        <a class="l_bread_li_item_link" href="<%= bread_url %>"><%= bread_name %></a>
+      </li><!-- /.l_bread_li_item -->
+    <% } %>
+    <li class="l_bread_li_item"><%= pageData.page_name %></li>
+  </ul><!-- /.l_bread_li -->
+</nav><!-- /.l_bread -->

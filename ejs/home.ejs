@@ -2,6 +2,13 @@
 
 <%- include('partial/_header') -%>
 
+<% var breads = {
+  '../../../': 'トップページ',
+  '../../': '企業情報',
+  '../': '採用情報',
+} %>
+<%- include('partial/_breadcrumb', {breadData:breads}) -%>
+
 <main class="l_main">
   main
 </main>
