@@ -8,6 +8,9 @@ openurl = require 'openurl'
 doiuse = require 'doiuse'
 autoprefixer = require 'autoprefixer'
 mqpacker = require 'css-mqpacker'
+Crawler = require 'simplecrawler'
+crawler = new Crawler("http://localhost:3000/")
+#process.envで環境変数を取得できるので、URLはそこから取得するなどしてもよい
 
 # paths
 paths =
@@ -145,6 +148,15 @@ g.task 'bs', ->
 # build
 g.task 'build', ['ejs', 'css', 'coffee', 'img'], ->
   console.log 'build done!'
+
+# 404
+g.task 'linkcheck', ->
+  crawler.on 'fetch404', (queueItem, responseBuffer, response) ->
+    # browser-syncのパスは除外する
+    unless queueItem.url.match /browser-sync/
+      console.log '404 url is %s', queueItem.url
+
+  crawler.start()
 
 # test
 g.task 'test', ->

@@ -70,6 +70,10 @@ coffeescriptを生成する
 ## gulp img
 gulp.imageminで画像の最適化を行い、指定の場所に設置する
 
+## gulp linkcheck
+404ステータスコードをコンソール出力する
+細かい設定はこちら(https://github.com/cgiffard/node-simplecrawler)
+
 ## gulp sc5_edit
 sc5スタイルガイドを生成する
 生成されるディレクトリは下記の通り。
